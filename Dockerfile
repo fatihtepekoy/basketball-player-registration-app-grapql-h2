@@ -1,23 +1,9 @@
-# Docker multi-stage build
-FROM eclipse-temurin:17-jdk-alpine as build
-WORKDIR /workspace/app
-
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
-
-RUN ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
-
-FROM eclipse-temurin:17-jre-alpine
-#VOLUME /tmp
-ARG DEPENDENCY=/workspace/app/target/dependency
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-#ENTRYPOINT ["java","-cp","app:app/lib/*","-DAPPLOGDIR=/logs -Dserver.port=8080","BasketballPlayerRegistrationApp.Application"]
-#CMD java -Dserver.port=$PORT $JAVA_OPTS -jar /software/rest1.jar
-CMD java -cp app:app/lib/* -DAPPLOGDIR=/logs -Dserver.port=8080 BasketballPlayerRegistrationApp.Application
-
-
+FROM eclipse-temurin:17-jdk-alpine
+COPY target/*.jar app.jar
+RUN mkdir -p logs
+EXPOSE 8080
+#ENTRYPOINT ["java $JAVA_OPTS","-jar", "/app.jar"]
+#ENTRYPOINT java $JAVA_OPTS -jar /app.jar
+#ENTRYPOINT ["java","-cp","app:app/lib/*","-DAPPLOGDIR=/logs -Dserver.port=8080","BasketballPlayerRegistrationApp"]
+CMD java -DAPPLOGDIR=/logs -Dserver.port=8080 $JAVA_OPTS -jar /app.jar
+#CMD java -cp app:app/lib/* -DAPPLOGDIR=/logs -Dserver.port=8080 com.fatih.basketball.BasketballPlayerRegistrationApp
