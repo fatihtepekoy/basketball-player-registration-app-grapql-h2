@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jre-alpine
-COPY target/*.jar app.jar
+COPY basketball-player-registration-app*.jar app.jar
 RUN mkdir -p logs
 ENV JAVA_OPTS="-DAPPLOGDIR=/logs -Dserver.port=$PORT"
 #EXPOSE 8080
