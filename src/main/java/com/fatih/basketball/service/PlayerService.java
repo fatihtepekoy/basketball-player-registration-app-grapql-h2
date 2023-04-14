@@ -12,14 +12,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class PlayerService {
 
-  private PlayerRepository playerRepository;
-  private IModelMapper mapper;
+  private final PlayerRepository playerRepository;
+  private final IModelMapper mapper;
 
   public PlayerService(PlayerRepository playerRepository, IModelMapper mapper) {
     this.playerRepository = playerRepository;
