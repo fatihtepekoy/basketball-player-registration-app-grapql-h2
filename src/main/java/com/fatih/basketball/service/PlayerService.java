@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +21,7 @@ public class PlayerService {
   private final PlayerRepository playerRepository;
   private final IModelMapper mapper;
 
-  public PlayerService(PlayerRepository playerRepository, IModelMapper mapper) {
+  private PlayerService(PlayerRepository playerRepository, IModelMapper mapper) {
     this.playerRepository = playerRepository;
     this.mapper = mapper;
   }
@@ -39,22 +38,28 @@ public class PlayerService {
 
   public List<Player> listAllPlayers(OrderField orderField, OrderType orderType) {
     List<Player> playerList = playerRepository.findAll();
+    orderByFieldNaturalOrder(orderField, playerList);
+    reverseOrder(orderType, playerList);
+    return playerList;
+  }
+
+  private static void reverseOrder(OrderType orderType, List<Player> playerList) {
+    if (orderType == OrderType.DESC) {
+      Collections.reverse(playerList);
+    }
+  }
+
+  private static void orderByFieldNaturalOrder(OrderField orderField, List<Player> playerList) {
     switch (orderField) {
       case NAME -> playerList.sort(Comparator.comparing(Player::getName));
       case SURNAME -> playerList.sort(Comparator.comparing(Player::getSurname));
       case POSITION -> playerList.sort(Comparator.comparing(Player::getPosition));
     }
-
-    if (orderType == OrderType.DESC) {
-      Collections.reverse(playerList);
-    }
-
-    return playerList;
   }
 
   public Player addPlayer(PlayerDTO playerDTO) {
     Player player = mapper.convertDTOToModel(playerDTO);
-    if (playerRepository.count() < 12) {
+    if (hasReachedMaxPlayerCount()) {
       Player savedPlayer = playerRepository.save(player);
       if (savedPlayer.getId() != null) {
         log.info("Player ID {} is added. Player details : {}", savedPlayer.getId(), savedPlayer);
@@ -63,6 +68,10 @@ public class PlayerService {
     }
     log.warn("Player count is 12 currently. A team can have 12 player at most. No more player can be added.");
     throw new MaxPlayerSizeException();
+  }
+
+  private boolean hasReachedMaxPlayerCount() {
+    return playerRepository.count() < 12;
   }
 }
 

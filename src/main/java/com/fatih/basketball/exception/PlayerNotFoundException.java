@@ -17,11 +17,6 @@ public class PlayerNotFoundException extends RuntimeException implements GraphQL
   }
 
   @Override
-  public String getMessage() {
-    return super.getMessage();
-  }
-
-  @Override
   public List<Object> getPath() {
     return null;
   }

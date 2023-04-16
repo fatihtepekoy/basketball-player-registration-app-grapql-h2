@@ -1,7 +1,5 @@
 package com.fatih.basketball.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public enum Position {
     PG("Point guard"),
     SG("Shooting guard"),
@@ -10,7 +8,7 @@ public enum Position {
     C("Center");
 
 
-    private String desc;
+    private final String desc;
 
     Position(String desc) {
         this.desc = desc;

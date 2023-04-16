@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,13 +28,13 @@ public abstract class BaseEntity implements Serializable {
 
   @CreationTimestamp
   @Column(name = "created_at", updatable = false)
-  private Date createdAt;
+  private LocalDateTime createdAt;
 
   @UpdateTimestamp
   @Column(name = "updated_at")
-  private Date updatedAt;
+  private LocalDateTime updatedAt;
 
-  public BaseEntity(Long id) {
+  protected BaseEntity(Long id) {
     this.id = id;
   }
 

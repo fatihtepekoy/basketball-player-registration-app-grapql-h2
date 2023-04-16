@@ -67,9 +67,8 @@ class PlayerServiceTest {
     when(playerRepository.count()).thenReturn(12L);
 
     //Then
-    Assertions.assertThrows(MaxPlayerSizeException.class, () -> {
-      playerService.addPlayer(playerDTO);
-    }, "MaxPlayerSizeException was expected");
+    Assertions.assertThrows(MaxPlayerSizeException.class, () -> playerService.addPlayer(playerDTO),
+        "MaxPlayerSizeException was expected");
   }
 
   @Test
@@ -90,18 +89,17 @@ class PlayerServiceTest {
     when(playerRepository.existsById(any(Long.class))).thenReturn(false);
 
     //Then
-    Assertions.assertThrows(PlayerNotFoundException.class, () -> {
-      playerService.deletePlayer(1L);
-    }, "PlayerNotFoundException was expected");
+    Assertions.assertThrows(PlayerNotFoundException.class, () -> playerService.deletePlayer(1L),
+        "PlayerNotFoundException was expected");
   }
 
   @Test
   void listPlayersDescendingOrderByName() {
     //Given
     List<Player> players = new ArrayList<>();
-    Player ali = new Player(1L,"Ali", "Tepekoy", Position.PG);
-    Player fatih = new Player(2L,"Fatih", "Tepekoy", Position.C);
-    Player zeki = new Player(3L,"Zeki", "Tepekoy", Position.SF);
+    Player ali = new Player(1L, "Ali", "Tepekoy", Position.PG);
+    Player fatih = new Player(2L, "Fatih", "Tepekoy", Position.C);
+    Player zeki = new Player(3L, "Zeki", "Tepekoy", Position.SF);
     players.add(zeki);
     players.add(fatih);
     players.add(ali);

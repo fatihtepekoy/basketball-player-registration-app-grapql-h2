@@ -28,21 +28,6 @@ public class MaxPlayerSizeException extends RuntimeException implements GraphQLE
   }
 
   @Override
-  public List<Object> getPath() {
-    return GraphQLError.super.getPath();
-  }
-
-  @Override
-  public Map<String, Object> toSpecification() {
-    return GraphQLError.super.toSpecification();
-  }
-
-  @Override
-  public Map<String, Object> getExtensions() {
-    return GraphQLError.super.getExtensions();
-  }
-
-  @Override
   public GraphQLError throwException(Throwable ex, DataFetchingEnvironment env) {
     return GraphqlErrorBuilder.newError()
                               .errorType(ErrorType.FORBIDDEN)
