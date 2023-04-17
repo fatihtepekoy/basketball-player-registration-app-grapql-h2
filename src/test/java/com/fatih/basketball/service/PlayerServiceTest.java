@@ -24,21 +24,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class PlayerServiceTest {
 
   @Mock
   private PlayerRepository playerRepository;
 
-  @InjectMocks
-  private PlayerService playerService;
-
   @Spy
   private IModelMapper mapper = new PlayerModelMapper();
+
+  @InjectMocks
+  private PlayerService playerService;
 
   @Test
   void contextLoads() {
@@ -85,9 +83,6 @@ class PlayerServiceTest {
 
   @Test
   void deleteNonExistingPlayerReturnsException() {
-    //Given
-    when(playerRepository.existsById(any(Long.class))).thenReturn(false);
-
     //Then
     Assertions.assertThrows(PlayerNotFoundException.class, () -> playerService.deletePlayer(1L),
         "PlayerNotFoundException was expected");

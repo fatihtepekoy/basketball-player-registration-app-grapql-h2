@@ -11,20 +11,19 @@ import com.fatih.basketball.repository.PlayerRepository;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PlayerService {
 
-  private final PlayerRepository playerRepository;
-  private final IModelMapper mapper;
-
-  private PlayerService(PlayerRepository playerRepository, IModelMapper mapper) {
-    this.playerRepository = playerRepository;
-    this.mapper = mapper;
-  }
+  private final @NonNull PlayerRepository playerRepository;
+  private final @NonNull IModelMapper mapper;
 
   public boolean deletePlayer(Long id) {
     if (playerRepository.existsById(id)) {
