@@ -34,8 +34,13 @@ TODO: https://fatihtepekoy.medium.com/
  https://api.postman.com/collections/7891468-9bb9d9b0-c038-4e2a-bac6-5cdad072c164?access_key=PMAT-01GXK40BY6FHBD7PN9RHKBTJEJ
 
  You can connect to the H2 database here. (user: fatih)
+ 
  https://localhost/h2-console
+ 
  User: Fatih
+ 
  database: jdbc:h2:mem:test
+ 
  password: (none, can be left blank)
+ 
 
