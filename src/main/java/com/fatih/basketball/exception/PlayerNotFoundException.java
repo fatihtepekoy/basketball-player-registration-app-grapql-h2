@@ -5,25 +5,26 @@ import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import graphql.language.SourceLocation;
 import graphql.schema.DataFetchingEnvironment;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.graphql.execution.ErrorType;
 
 public class PlayerNotFoundException extends RuntimeException implements GraphQLError, IBasketballRegisterAppException {
 
-  private static final String errorMessage = "Player does not exist. ID : ";
+  private static final String ERROR_MESSAGE = "Player does not exist. ID : ";
 
   public PlayerNotFoundException(String id) {
-    super(errorMessage + id);
+    super(ERROR_MESSAGE + id);
   }
 
   @Override
   public List<Object> getPath() {
-    return null;
+    return new ArrayList<>();
   }
 
   @Override
   public List<SourceLocation> getLocations() {
-    return null;
+    return new ArrayList<>();
   }
 
   @Override

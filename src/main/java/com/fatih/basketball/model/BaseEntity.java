@@ -8,30 +8,31 @@ import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
 @NoArgsConstructor
-@Getter
-@Setter
 @ToString
 public abstract class BaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Getter(AccessLevel.PUBLIC)
   private Long id;
 
+  @Column(name = "created_at")
   @CreationTimestamp
-  @Column(name = "created_at", updatable = false)
+  @Getter(AccessLevel.PRIVATE)
   private LocalDateTime createdAt;
 
   @UpdateTimestamp
   @Column(name = "updated_at")
+  @Getter(AccessLevel.PRIVATE)
   private LocalDateTime updatedAt;
 
   protected BaseEntity(Long id) {

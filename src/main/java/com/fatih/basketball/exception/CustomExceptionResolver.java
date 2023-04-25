@@ -13,8 +13,8 @@ public class CustomExceptionResolver extends DataFetcherExceptionResolverAdapter
   @Override
   protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
 
-    if (ex instanceof IBasketballRegisterAppException) {
-      return ((IBasketballRegisterAppException) ex).throwException(ex, env);
+    if (ex instanceof IBasketballRegisterAppException basketballRegisterAppException) {
+      return basketballRegisterAppException.throwException(ex, env);
     } else {
       return GraphqlErrorBuilder.newError()
                                 .errorType(ErrorType.BAD_REQUEST)

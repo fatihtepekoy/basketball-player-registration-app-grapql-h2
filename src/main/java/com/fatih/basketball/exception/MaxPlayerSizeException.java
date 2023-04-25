@@ -5,21 +5,21 @@ import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import graphql.language.SourceLocation;
 import graphql.schema.DataFetchingEnvironment;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.springframework.graphql.execution.ErrorType;
 
 public class MaxPlayerSizeException extends RuntimeException implements GraphQLError, IBasketballRegisterAppException {
 
-  private static final String errorMessage = "Maximum capacity is 12, you can not add more player!!";
+  private static final String ERROR_MESSAGE = "Maximum capacity is 12, you can not add more player!!";
 
   public MaxPlayerSizeException() {
-    super(errorMessage);
+    super(ERROR_MESSAGE);
   }
 
   @Override
   public List<SourceLocation> getLocations() {
-    return null;
+    return new ArrayList<>();
   }
 
   @Override

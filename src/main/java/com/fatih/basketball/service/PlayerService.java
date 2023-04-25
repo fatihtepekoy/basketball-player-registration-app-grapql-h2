@@ -1,5 +1,6 @@
 package com.fatih.basketball.service;
 
+import com.fatih.basketball.configration.CacheConfiguration;
 import com.fatih.basketball.dto.PlayerDTO;
 import com.fatih.basketball.exception.MaxPlayerSizeException;
 import com.fatih.basketball.exception.PlayerNotFoundException;
@@ -14,7 +15,10 @@ import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +28,22 @@ public class PlayerService {
 
   private final @NonNull PlayerRepository playerRepository;
   private final @NonNull IModelMapper mapper;
+
+
+  @CacheEvict(value = CacheConfiguration.PLAYERS_CACHE, allEntries = true)
+  public Player addPlayer(PlayerDTO playerDTO) {
+    Player player = mapper.convertDTOToModel(playerDTO);
+    if (hasReachedMaxPlayerCount()) {
+      Player savedPlayer = playerRepository.save(player);
+      if (savedPlayer.getId() != null) {
+        log.info("Player ID {} is added. Player details : {}", savedPlayer.getId(), savedPlayer);
+        return savedPlayer;
+      }
+    }
+    log.warn("Player count is 12 currently. A team can have 12 player at most. No more player can be added.");
+    throw new MaxPlayerSizeException();
+  }
+
 
   public boolean deletePlayer(Long id) {
     if (playerRepository.existsById(id)) {
@@ -35,6 +55,7 @@ public class PlayerService {
     throw new PlayerNotFoundException(String.valueOf(id));
   }
 
+  @Cacheable(CacheConfiguration.PLAYERS_CACHE)
   public List<Player> listAllPlayers(OrderField orderField, OrderType orderType) {
     List<Player> playerList = playerRepository.findAll();
     orderByFieldNaturalOrder(orderField, playerList);
@@ -56,18 +77,7 @@ public class PlayerService {
     }
   }
 
-  public Player addPlayer(PlayerDTO playerDTO) {
-    Player player = mapper.convertDTOToModel(playerDTO);
-    if (hasReachedMaxPlayerCount()) {
-      Player savedPlayer = playerRepository.save(player);
-      if (savedPlayer.getId() != null) {
-        log.info("Player ID {} is added. Player details : {}", savedPlayer.getId(), savedPlayer);
-        return savedPlayer;
-      }
-    }
-    log.warn("Player count is 12 currently. A team can have 12 player at most. No more player can be added.");
-    throw new MaxPlayerSizeException();
-  }
+
 
   private boolean hasReachedMaxPlayerCount() {
     return playerRepository.count() < 12;
