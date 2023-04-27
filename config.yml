@@ -1,0 +1,18 @@
+spectaql:
+  logoFile: ''
+
+introspection:
+  schemaFile: src/main/resources/graphql/schema.graphqls
+  url: ''
+  headers:
+    Authorization: ''
+
+info:
+  title: 'GraphQl - Basketball registration app api docs'
+  description: ''
+
+servers:
+  - url: 'http://localhost:8080/graphiql?path=/apis/graphql/basketball'
+    description: Production
+    production: true
+
